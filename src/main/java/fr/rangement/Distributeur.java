@@ -39,7 +39,11 @@ final class Distributeur {
     private Distributeur() {}
 
     static Resultat ranger(Inventory source, List<Block> blocsSource, Reglages reglages) {
-        List<Cible> cibles = chercher(blocsSource, reglages.rayon(), reglages.hauteur());
+        return repartir(source, chercher(blocsSource, reglages.rayon(), reglages.hauteur()), reglages);
+    }
+
+    /** Repartit le contenu de la source dans les cibles (deja triees de la plus proche a la plus loin). */
+    static Resultat repartir(Inventory source, List<Cible> cibles, Reglages reglages) {
         int ranges = 0;
         Set<Block> destinations = new LinkedHashSet<>();
         Set<Block> pleins = new LinkedHashSet<>();
@@ -130,21 +134,25 @@ final class Distributeur {
                     Role role = Conteneurs.role(blocs);
                     if (role == Role.TRI) continue;
 
-                    Set<Material> contenu = new HashSet<>();
-                    Set<String> familles = new HashSet<>();
-                    for (ItemStack it : inv.getContents()) {
-                        if (it == null || it.isEmpty()) continue;
-                        if (contenu.add(it.getType())) {
-                            String f = Familles.de(it.getType());
-                            if (f != null) familles.add(f);
-                        }
-                    }
-                    double d2 = b.getLocation().distanceSquared(origine.getLocation());
-                    cibles.add(new Cible(inv, b, role, contenu, familles, d2));
+                    cibles.add(cible(inv, b, role, b.getLocation().distanceSquared(origine.getLocation())));
                 }
             }
         }
         cibles.sort(Comparator.comparingDouble(Cible::distance2));
         return cibles;
+    }
+
+    /** Cible a partir de ce que contient deja le coffre (objets et familles d'objets). */
+    static Cible cible(Inventory inv, Block b, Role role, double distance2) {
+        Set<Material> contenu = new HashSet<>();
+        Set<String> familles = new HashSet<>();
+        for (ItemStack it : inv.getContents()) {
+            if (it == null || it.isEmpty()) continue;
+            if (contenu.add(it.getType())) {
+                String f = Familles.de(it.getType());
+                if (f != null) familles.add(f);
+            }
+        }
+        return new Cible(inv, b, role, contenu, familles, distance2);
     }
 }

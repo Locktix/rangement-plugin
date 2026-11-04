@@ -21,9 +21,15 @@ final class Tri {
     private Tri() {}
 
     static void trier(Inventory inv) {
-        // 1. Fusionne les piles identiques incompletes
+        List<ItemStack> objets = fusionner(inv.getContents());
+        objets.sort(ORDRE);
+        for (int i = 0; i < inv.getSize(); i++) inv.setItem(i, i < objets.size() ? objets.get(i) : null);
+    }
+
+    /** Fusionne les piles identiques incompletes (copies : le contenu d'origine n'est pas modifie). */
+    static List<ItemStack> fusionner(ItemStack[] contenu) {
         List<ItemStack> objets = new ArrayList<>();
-        for (ItemStack it : inv.getContents()) {
+        for (ItemStack it : contenu) {
             if (it == null || it.isEmpty()) continue;
             int reste = it.getAmount();
             for (ItemStack f : objets) {
@@ -39,13 +45,11 @@ final class Tri {
                 objets.add(copie);
             }
         }
-        // 2. Trie et remet en place
-        objets.sort(ORDRE);
-        for (int i = 0; i < inv.getSize(); i++) inv.setItem(i, i < objets.size() ? objets.get(i) : null);
+        return objets;
     }
 
     /** 0 = outils, armes et armures ; 1 = blocs ; 2 = objets ; 3 = nourriture. */
-    private static int categorie(ItemStack it) {
+    static int categorie(ItemStack it) {
         Material m = it.getType();
         if (m.getMaxDurability() > 0) return 0;
         if (m.isEdible()) return 3;
