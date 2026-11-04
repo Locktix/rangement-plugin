@@ -1,0 +1,28 @@
+# ============ Rangement ============
+# Apres modification : /rangement reload
+#
+# Coffre de tri : un coffre ou un tonneau avec un panneau [Tri] dessus (ou renomme "Tri" a l'enclume).
+# Quand on le ferme, chaque objet part dans le coffre le plus proche qui contient deja ce meme objet.
+# Coffre divers : panneau [Divers] (ou renomme "Divers"). Il recoit ce qui n'a pas trouve de coffre.
+
+# Distance maximale (en blocs) entre le coffre de tri et les coffres de rangement
+rayon: 16
+# Distance verticale maximale (en blocs, vers le haut et vers le bas)
+hauteur: 8
+
+# Familles : si aucun coffre ne contient l'objet exact, il va dans un coffre qui contient un objet
+# de la meme famille (chene -> bouleau, laine rouge -> laine bleue, minerais, fleurs, poissons...)
+familles: true
+
+# Remet en ordre les coffres qui viennent de recevoir des objets
+trier-destinations: true
+
+# Les objets amenes par un entonnoir dans le coffre de tri sont aussi ranges (pratique pour les fermes)
+entonnoirs: true
+
+# Petites particules vertes sur les coffres qui ont recu des objets
+particules: true
+
+# /rangement test (admins) : construit un coin de test devant soi.
+# ATTENTION : vide une zone de 13 x 7 blocs (sol remplace par de la pierre lisse). A laisser a false sur le vrai serveur.
+commande-test: false

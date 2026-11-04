@@ -1,0 +1,10 @@
+name: Rangement
+version: '1.0.0'
+main: fr.rangement.Rangement
+api-version: '26.3'
+description: Coffre de tri qui range tout seul son contenu dans les coffres voisins
+authors: [alanp]
+permissions:
+  rangement.admin:
+    description: /rangement reload, test, objets
+    default: op
