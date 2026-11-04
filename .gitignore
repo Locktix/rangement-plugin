@@ -1,3 +1,4 @@
 build/
 *.class
 lib/test/jars/
+logs/
